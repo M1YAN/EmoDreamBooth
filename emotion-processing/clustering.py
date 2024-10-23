@@ -83,7 +83,7 @@ def load_image_paths(data_dir, categories):
         image_paths[category] = [os.path.join(category_dir, img) for img in os.listdir(category_dir)]
     return image_paths
 
-def cluster_each_category_with_dbscan(category_features, emotion_categories, eps=0.5, min_samples=5):
+def cluster_each_category_with_dbscan(category_features, emotion_categories, eps=0.11, min_samples=5):
     category_clusters = {}
     for category in emotion_categories:
         print(f"Processing category: {category}")
@@ -145,11 +145,12 @@ else:
     print("Features saved.")
 
 # 使用 DBSCAN 进行聚类（余弦距离度量）
-category_clusters  = cluster_each_category_with_dbscan(category_features, emotion_categories, eps=0.11, min_samples=5)
+eps = 0.08
+category_clusters  = cluster_each_category_with_dbscan(category_features, emotion_categories, eps=eps, min_samples=5)
 
 # 打印聚类结果
 print(category_clusters)
 
-cluster_path = "/openbayes/input/input0/EmoSet-118K/cluster_result"
+cluster_path = f"/openbayes/input/input0/EmoSet-118K/cluster_result_eps_{eps}"
 
 save_clusters_by_labels(image_paths, category_clusters, cluster_path)
